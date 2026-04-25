@@ -1,6 +1,6 @@
 public interface IState
 {
-    void OnEnter();
-    void OnUpdate();
-    void OnExit();
+    void Awake();   
+    void Execute(); 
+    void Sleep();   
 }
