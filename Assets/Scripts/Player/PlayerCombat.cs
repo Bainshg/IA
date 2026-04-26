@@ -9,7 +9,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void PerformAttack()
     {
-        // Detectamos enemigos en una esfera frente al jugador
+        
         Collider[] hitEnemies = Physics.OverlapSphere(transform.position + transform.forward, attackRange, enemyLayer);
 
         foreach (Collider enemy in hitEnemies)
