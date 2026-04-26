@@ -4,17 +4,19 @@ public static class SteeringBehaviours
 {
     public static Vector3 Seek(Transform agent, Vector3 targetPos, Vector3 currentVelocity, float maxSpeed)
     {
-        Vector3 desired = (targetPos - agent.position).normalized * maxSpeed;
+        Vector3 flatTarget = new Vector3(targetPos.x, agent.position.y, targetPos.z);
+        Vector3 desired = (flatTarget - agent.position).normalized * maxSpeed;
         return desired - currentVelocity;
     }
 
     public static Vector3 Flee(Transform agent, Vector3 targetPos, Vector3 currentVelocity, float maxSpeed)
     {
-        Vector3 desired = (agent.position - targetPos).normalized * maxSpeed;
+        Vector3 flatTarget = new Vector3(targetPos.x, agent.position.y, targetPos.z);
+        Vector3 desired = (agent.position - flatTarget).normalized * maxSpeed;
         return desired - currentVelocity;
     }
 
-    // Pursuit: Persigue prediciendo la posición futura del jugador 
+    // Pursuit: Persigue prediciendo la posiciï¿½n futura del jugador 
     public static Vector3 Pursuit(Transform agent, Transform target, Vector3 targetVelocity, Vector3 currentVelocity, float maxSpeed)
     {
         float distance = Vector3.Distance(target.position, agent.position);
@@ -24,7 +26,7 @@ public static class SteeringBehaviours
         return Seek(agent, futurePosition, currentVelocity, maxSpeed);
     }
 
-    // Evade: Huye de la posición futura del jugador
+    // Evade: Huye de la posiciï¿½n futura del jugador
     public static Vector3 Evade(Transform agent, Transform target, Vector3 targetVelocity, Vector3 currentVelocity, float maxSpeed)
     {
         float distance = Vector3.Distance(target.position, agent.position);

@@ -3,7 +3,8 @@ using UnityEngine;
 public class EnemyDecisionTree : MonoBehaviour
 {
     private EnemyAI _ai;
-    [SerializeField] private float attackDistance = 2.5f;
+    [SerializeField] private float attackDistance = 1.5f;
+    [SerializeField] private float safeEscapeDistance = 15f;
 
     void Awake() => _ai = GetComponent<EnemyAI>();
 
@@ -11,26 +12,41 @@ public class EnemyDecisionTree : MonoBehaviour
     {
         float distToPlayer = Vector3.Distance(transform.position, _ai.PlayerTransform.position);
 
-        // 1. ¿Ve al jugador?
+        bool isAlreadyFleeing = _ai.StateMachine.CurrentState != null && 
+                                _ai.StateMachine.CurrentState.GetType() == typeof(EntityRunAwayState);
+        
+        // Si se estaba escapando, le importa la distancia al player (no podemos hacer chequeos de vision)
+        if (isAlreadyFleeing)
+        {
+            if (distToPlayer < safeEscapeDistance)
+            {
+                return; // Sigue huyendo 
+            }
+            else
+            {
+                // Ya estÃ¡ lo suficientemente lejos, vuelve a su rutina
+                _ai.StateMachine.ChangeState(_ai.NeedsToIdle ? EntityStates.Idle : EntityStates.Patrol);
+                return; 
+            }
+        }
+
+        // LÃ³gica normal de detecciÃ³n
         if (_ai.LoS.CanSeeTarget(_ai.PlayerTransform))
         {
-            // 2. Si está muy cerca, ATACA 
-            if (distToPlayer <= attackDistance)
+            if (distToPlayer <= attackDistance) // atacar
             {
-                _ai.StateMachine.ChangeState(EntityStates.Attack);
+                _ai.StateMachine.ChangeState(EntityStates.Attack); 
             }
-            // 3. Si no está cerca pero lo ve, elige según su grupo 
             else
             {
                 if (_ai.IsAggressive)
-                    _ai.StateMachine.ChangeState(EntityStates.Chase); // Usará Pursuit
+                    _ai.StateMachine.ChangeState(EntityStates.Chase);
                 else
-                    _ai.StateMachine.ChangeState(EntityStates.RunAway); // Usará Evade
+                    _ai.StateMachine.ChangeState(EntityStates.RunAway);
             }
         }
-        else
+        else 
         {
-            // 4. Si no hay nadie, patrulla o descansa 
             if (_ai.NeedsToIdle)
                 _ai.StateMachine.ChangeState(EntityStates.Idle);
             else

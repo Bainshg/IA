@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             IsWalking = false;
+            _movement.Move(Vector3.zero);
         }
 
         // Ejecutar ataque

@@ -3,21 +3,28 @@ using UnityEngine;
 public class EntityRunAwayState : EntityState
 {
     private EnemyAI _ai;
+    private PlayerMovement _playerMovement;
 
     public EntityRunAwayState(EnemyAI ai, StateMachine<EntityStates> sm) : base(sm)
     {
         _ai = ai;
+        _playerMovement = _ai.PlayerTransform.GetComponent<PlayerMovement>();
     }
 
     public override void Execute()
     {
-        // Huimos del jugador usando Flee
-        Vector3 targetPos = _ai.PlayerTransform.position;
-        Vector3 steer = SteeringBehaviours.Flee(_ai.transform, targetPos, _ai.Agent.Velocity, _ai.Agent.MaxSpeed);
+        Vector3 playerVelocity = _playerMovement != null ? _playerMovement.Velocity : Vector3.zero;
+        
+        Vector3 steer = SteeringBehaviours.Evade(
+            _ai.transform, 
+            _ai.PlayerTransform, 
+            playerVelocity, 
+            _ai.Agent.Velocity, 
+            _ai.Agent.MaxSpeed
+        );
 
-        // El esquive también se aplica al huir
+        // El esquive tambiï¿½n se aplica al huir
         steer += _ai.Avoidance.GetAvoidanceForce();
-
         _ai.Agent.ApplySteering(steer);
     }
 }

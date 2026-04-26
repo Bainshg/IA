@@ -9,9 +9,14 @@ public class SteeringAgent : MonoBehaviour
 
     public void ApplySteering(Vector3 steeringForce)
     {
+        steeringForce.y = 0f;   
         steeringForce = Vector3.ClampMagnitude(steeringForce, maxForce);
         Vector3 acceleration = steeringForce / mass;
-        _velocity = Vector3.ClampMagnitude(_velocity + acceleration * Time.deltaTime, maxSpeed);
+        
+        _velocity += acceleration * Time.deltaTime;
+        _velocity.y = 0f;
+        
+        _velocity = Vector3.ClampMagnitude(_velocity, maxSpeed);
         transform.position += _velocity * Time.deltaTime;
 
         if (_velocity.sqrMagnitude > 0.1f)

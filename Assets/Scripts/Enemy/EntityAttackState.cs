@@ -8,12 +8,12 @@ public class EntityAttackState : EntityState
 
     public override void Awake()
     {
-        Debug.Log("¡EL ENEMIGO ESTÁ ATACANDO!");
+        Debug.Log("ï¿½EL ENEMIGO ESTï¿½ ATACANDO!");
     }
 
     public override void Execute()
     {
-        // Aquí podrías llamar a una función de "GameOver" en tu LevelManager
+        // Aquï¿½ podrï¿½as llamar a una funciï¿½n de "GameOver" en tu LevelManager
         // O simplemente seguir pegado al player
         Vector3 steer = SteeringBehaviours.Seek(_ai.transform, _ai.PlayerTransform.position, _ai.Agent.Velocity, _ai.Agent.MaxSpeed);
         _ai.Agent.ApplySteering(steer + _ai.Avoidance.GetAvoidanceForce());
