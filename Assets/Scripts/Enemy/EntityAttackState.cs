@@ -8,14 +8,16 @@ public class EntityAttackState : EntityState
 
     public override void Awake()
     {
-        Debug.Log("�EL ENEMIGO EST� ATACANDO!");
+        // Triggereamos la pantalla de Game Over
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowGameOver();
+        }
+        else
+        {
+            Debug.LogWarning("¡Falta el UIManager en la escena!");
+        }
     }
 
-    public override void Execute()
-    {
-        // Aqu� podr�as llamar a una funci�n de "GameOver" en tu LevelManager
-        // O simplemente seguir pegado al player
-        Vector3 steer = SteeringBehaviours.Seek(_ai.transform, _ai.PlayerTransform.position, _ai.Agent.Velocity, _ai.Agent.MaxSpeed);
-        _ai.Agent.ApplySteering(steer + _ai.Avoidance.GetAvoidanceForce());
-    }
+    public override void Execute() { } 
 }

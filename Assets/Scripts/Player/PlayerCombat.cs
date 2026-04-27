@@ -9,15 +9,17 @@ public class PlayerCombat : MonoBehaviour
 
     public void PerformAttack()
     {
-        
-        Collider[] hitEnemies = Physics.OverlapSphere(transform.position + transform.forward, attackRange, enemyLayer);
+        // Corregimos el centro del Overlap para que sea un poco más adelante
+        Vector3 attackCenter = transform.position + transform.forward * 1.5f;
+        Collider[] hitEnemies = Physics.OverlapSphere(attackCenter, attackRange, enemyLayer);
 
         foreach (Collider enemy in hitEnemies)
         {
-            if (enemy.TryGetComponent(out IDamageable damageable))
+            // Buscamos la interfaz, no importa el nombre del script de vida
+            if (enemy.TryGetComponent(out IDamageable victim))
             {
-                damageable.TakeDamage(damageValue);
-                Debug.Log($"Golpeaste a: {enemy.name}");
+                victim.TakeDamage(damageValue);
+                Debug.Log($"<color=green>Impacto en {enemy.name}!</color>");
             }
         }
     }

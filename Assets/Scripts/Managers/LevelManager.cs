@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour
@@ -19,13 +18,19 @@ public class LevelManager : MonoBehaviour
         // Suscribirse a la muerte de cada enemigo
         foreach (var enemy in enemiesInLevel)
         {
+            // Usamos una función anónima para pasar quién murió
             enemy.OnDeath += () => CheckWinCondition(enemy);
         }
     }
 
     private void CheckWinCondition(HealthManager deadEnemy)
     {
-        enemiesInLevel.Remove(deadEnemy);
+        if (enemiesInLevel.Contains(deadEnemy))
+        {
+            enemiesInLevel.Remove(deadEnemy);
+        }
+
+        // Si ya no quedan enemigos en la lista... ¡GANASTE!
         if (enemiesInLevel.Count <= 0)
         {
             WinGame();
@@ -34,13 +39,17 @@ public class LevelManager : MonoBehaviour
 
     public void WinGame()
     {
-        Debug.Log("¡Victoria! Todos los enemigos eliminados.");
-        // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        Debug.Log("¡Victoria!");
+        // Llamamos a la pantalla de victoria del UI
+        if (UIManager.Instance != null)
+            UIManager.Instance.ShowWinScreen();
     }
 
     public void LoseGame()
     {
-        Debug.Log("¡Derrota! El player ha muerto.");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reinicia
+        Debug.Log("¡Derrota!");
+        // En lugar de reiniciar al toque, mostramos la pantalla de Game Over
+        if (UIManager.Instance != null)
+            UIManager.Instance.ShowGameOver();
     }
 }

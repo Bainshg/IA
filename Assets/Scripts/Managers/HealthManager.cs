@@ -17,17 +17,23 @@ public class HealthManager : MonoBehaviour, IDamageable
     public void TakeDamage(float amount)
     {
         currentHealth -= amount;
-        Debug.Log($"{gameObject.name} recibio {amount} de daño. Vida restante: {currentHealth}");
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
+        if (currentHealth <= 0) Die();
     }
 
     private void Die()
     {
         OnDeath?.Invoke();
-        Destroy(gameObject);
+
+        // Si es el Player, no lo destruimos (o rompemos todo), llamamos al UI
+        if (gameObject.CompareTag("Player"))
+        {
+            if (UIManager.Instance != null) UIManager.Instance.ShowGameOver();
+            else Debug.LogError("¡No hay UIManager en la escena para el Player!");
+        }
+        else
+        {
+            // Si es un enemigo, se va a la casa
+            Destroy(gameObject);
+        }
     }
 }

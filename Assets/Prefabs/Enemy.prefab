@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 8586007908978415490}
   - component: {fileID: 4899868746285742007}
   - component: {fileID: 826845546388518809}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ MonoBehaviour:
   sideRayAngle: 30
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
 --- !u!114 &3675566506401366338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,10 +161,10 @@ MonoBehaviour:
   angle: 90
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   targetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
 --- !u!114 &3283533447551051371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,6 +239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDistance: 2.5
+  safeEscapeDistance: 15
 --- !u!1 &5403570894659309867
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,7 +253,7 @@ GameObject:
   - component: {fileID: 5428969233701573198}
   - component: {fileID: 5001928885460271457}
   - component: {fileID: 2640543481025135272}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,7 +366,7 @@ GameObject:
   - component: {fileID: 5479742521982434805}
   - component: {fileID: 4125975038582437863}
   - component: {fileID: 9037496655792249630}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
