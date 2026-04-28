@@ -22,7 +22,10 @@ public class SteeringAgent : MonoBehaviour
         if (_velocity.sqrMagnitude > 0.1f)
             transform.forward = _velocity.normalized;
     }
-
+    public void StopAgent()
+    {
+        _velocity = Vector3.zero;
+    }
     public Vector3 Velocity => _velocity;
     public float MaxSpeed => maxSpeed;
 }

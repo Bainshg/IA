@@ -5,7 +5,8 @@ public class EntityIdleState : EntityState
     private EnemyAI _ai;
     private float _timer;
     private Renderer _rend;
-
+    private int _choice; 
+    private float _rotationSpeed = 90f; // Velocidad de rotación en grados por segundo
     public EntityIdleState(EnemyAI ai, StateMachine<EntityStates> sm) : base(sm)
     {
         _ai = ai;
@@ -14,18 +15,19 @@ public class EntityIdleState : EntityState
 
     public override void Awake()
     {
-        _timer = 1.0f;
-        float[] weights = { 40f, 25f, 10f }; // 40 Quieto, 25 Vigilar, 10 Alerta
-        int choice = RouletteWheel.Select(weights);
+        _ai.Agent.StopAgent();
 
-        switch (choice)
+        _timer = 1.0f;
+        float[] weights = { 30f, 40f, 15f }; // Quieto, Vigilar, Alerta
+        _choice = RouletteWheel.Select(weights);
+
+        switch (_choice)
         {
             case 0: // QUIETO: se queda 3 segundos totales en idle
-                if (_rend) _rend.material.color = Color.white;
+                if (_rend) _rend.material.color = Color.cyan;
                 _timer += 2.0f; 
                 break;
-            case 1: // VIGILAR: Rota un poco para mirar otro lugar, 2 segundos tots
-                _ai.transform.Rotate(0, 45, 0);
+            case 1: // VIGILAR: Rota para ver su panorama, está 2 segundos totales
                 if (_rend) _rend.material.color = Color.gray;
                 _timer += 1.0f; 
                 break;
@@ -36,7 +38,13 @@ public class EntityIdleState : EntityState
     }
 
     public override void Execute()
-    {
+    {   
+        //rotacion
+        if (_choice == 1)
+        {
+            _ai.transform.Rotate(0, _rotationSpeed * Time.deltaTime, 0, Space.World);
+        }
+
         _timer -= Time.deltaTime;
         if (_timer <= 0)
         {

@@ -1581,7 +1581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1443157074}
-  offset: {x: 0, y: 17, z: -2.6}
+  offset: {x: 0, y: 19.6, z: -2.6}
   smoothSpeed: 0.125
   lookAtTarget: 0
 --- !u!1001 &1043062188
@@ -3436,7 +3436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4891726675641315405, guid: c51ce2f1c546d334ea462d243d0a6937, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 59.3
+      value: 60.06
       objectReference: {fileID: 0}
     - target: {fileID: 4891726675641315405, guid: c51ce2f1c546d334ea462d243d0a6937, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3470,7 +3470,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: e01eeeefca6579546aad2f8558bbbcdd, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5011115665865286503, guid: c51ce2f1c546d334ea462d243d0a6937, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
