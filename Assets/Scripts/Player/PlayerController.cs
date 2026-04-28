@@ -16,7 +16,10 @@ public class PlayerController : MonoBehaviour
     {
         _movement = GetComponent<PlayerMovement>();
         _combat = GetComponent<PlayerCombat>();
+    }
 
+    void Start()
+    {
         //inicializamos la FSM del player
         _sm = new StateMachine<PlayerStates>();
         _sm.AddState(PlayerStates.Idle, new PlayerIdleState(this, _sm));
@@ -25,7 +28,6 @@ public class PlayerController : MonoBehaviour
         // arrancamos en Idle
         _sm.SetCurrent(new PlayerIdleState(this, _sm));
     }
-
     void Update()
     {
         // Lectura de Input (Flechas y WASD)
