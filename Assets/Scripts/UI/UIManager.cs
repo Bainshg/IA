@@ -16,7 +16,14 @@ public class UIManager : MonoBehaviour
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
         Time.timeScale = 0f;
     }
-
+    void Update()
+    {
+       
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ReloadScene();
+        }
+    }
     public void ShowWinScreen()
     {
         if (winPanel != null) winPanel.SetActive(true);
