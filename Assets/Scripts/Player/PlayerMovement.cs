@@ -1,20 +1,28 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float speed = 7f;
+    private Rigidbody rb;
 
-    // Propiedad pública: el enemigo puede LEERLA, pero solo este script puede MODIFICARLA
     public Vector3 Velocity { get; private set; }
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+
+        rb.freezeRotation = true;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+    }
 
     public void Move(Vector3 direction)
     {
-        // Calculamos la velocidad actual (dirección * magnitud)
-        // Si no hay input, la velocidad será Vector3.zero
         Velocity = direction * speed;
 
-        // Movimiento en espacio del mundo
-        transform.Translate(Velocity * Time.deltaTime, Space.World);
+        // Cambiado de linearVelocity a velocity para compatibilidad
+        rb.velocity = new Vector3(Velocity.x, rb.velocity.y, Velocity.z);
 
         if (direction != Vector3.zero)
         {

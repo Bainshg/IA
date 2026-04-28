@@ -6,6 +6,31 @@ public class PatrolBehaviour : MonoBehaviour
     private int _currentIndex = 0;
     private int _direction = 1;
 
+    void Start()
+    {
+        SetClosestWaypointAsStart();
+    }
+
+    private void SetClosestWaypointAsStart()
+    {
+        if (waypoints == null || waypoints.Length == 0) return;
+
+        float closestDistance = Mathf.Infinity;
+        int closestIndex = 0;
+
+        for (int i = 0; i < waypoints.Length; i++)
+        {
+            float distance = Vector3.Distance(transform.position, waypoints[i].position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestIndex = i;
+            }
+        }
+
+        _currentIndex = closestIndex;
+    }
+
     public Vector3 GetCurrentWaypoint()
     {
         if (waypoints == null || waypoints.Length == 0) return transform.position;
@@ -18,7 +43,6 @@ public class PatrolBehaviour : MonoBehaviour
 
         _currentIndex += _direction;
 
-        // Lógica de sentido inverso (A-B-C-B-A)
         if (_currentIndex >= waypoints.Length)
         {
             _direction = -1;
@@ -29,6 +53,8 @@ public class PatrolBehaviour : MonoBehaviour
             _direction = 1;
             _currentIndex = 1;
         }
+
+        _currentIndex = Mathf.Clamp(_currentIndex, 0, waypoints.Length - 1);
     }
 
     public bool HasReachedPoint(float threshold = 1.2f)
