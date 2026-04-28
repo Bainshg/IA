@@ -14,7 +14,7 @@ public class EntityChaseState : EntityState
     public override void Execute()
     {
         Vector3 playerVelocity = _playerMovement != null ? _playerMovement.Velocity : Vector3.zero;
-        // Obtenemos la velocidad del jugador (necesaria para Pursuit)
+        // Obtenemos la velocidad del jugador (para Pursuit)
         Vector3 steer = SteeringBehaviours.Pursuit(
             _ai.transform, 
             _ai.PlayerTransform, 

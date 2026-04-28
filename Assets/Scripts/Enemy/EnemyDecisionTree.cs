@@ -15,17 +15,17 @@ public class EnemyDecisionTree : MonoBehaviour
         bool canSee = _ai.LoS.CanSeeTarget(_ai.PlayerTransform);
         bool isFleeing = _ai.StateMachine.CurrentState is EntityRunAwayState;
 
-        // 1. Lógica de Huida (Prioridad si ya estaba huyendo)
+        // Logica de Huida (Prioridad si ya estaba huyendo)
         if (isFleeing)
         {
-            // Solo deja de huir si está REALMENTE lejos (distancia + buffer)
+            // Solo deja de huir si está lejos (distancia + buffer)
             if (distToPlayer < safeEscapeDistance + detectionBuffer) return;
 
             _ai.StateMachine.ChangeState(_ai.NeedsToIdle ? EntityStates.Idle : EntityStates.Patrol);
             return;
         }
 
-        // 2. Lógica de Detección Normal
+        // Lógica de Detección Normal
         if (canSee)
         {
             if (distToPlayer <= attackDistance)
@@ -39,7 +39,7 @@ public class EnemyDecisionTree : MonoBehaviour
         }
         else
         {
-            // 3. Rutina si no ve a nadie
+            // Rutina si no ve a nadie
             if (_ai.NeedsToIdle) _ai.StateMachine.ChangeState(EntityStates.Idle);
             else _ai.StateMachine.ChangeState(EntityStates.Patrol);
         }

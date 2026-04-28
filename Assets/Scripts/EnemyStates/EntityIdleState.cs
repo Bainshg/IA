@@ -14,20 +14,22 @@ public class EntityIdleState : EntityState
 
     public override void Awake()
     {
-        _timer = 2.5f;
-        float[] weights = { 60f, 30f, 10f }; // 60% Quieto, 30% Vigilar, 10% Alerta
+        _timer = 1.0f;
+        float[] weights = { 40f, 25f, 10f }; // 40 Quieto, 25 Vigilar, 10 Alerta
         int choice = RouletteWheel.Select(weights);
 
         switch (choice)
         {
-            case 0: // IDLE NORMAL
+            case 0: // QUIETO: se queda 3 segundos totales en idle
                 if (_rend) _rend.material.color = Color.white;
+                _timer += 2.0f; 
                 break;
-            case 1: // VIGILAR (Gira un poco para mirar)
+            case 1: // VIGILAR: Rota un poco para mirar otro lugar, 2 segundos tots
                 _ai.transform.Rotate(0, 45, 0);
                 if (_rend) _rend.material.color = Color.gray;
+                _timer += 1.0f; 
                 break;
-            case 2: // ALERTA (Cambia a amarillo por un momento)
+            case 2: // ALERTA: Cambia a amarillo por un momento, solo 1 segundo en Idle
                 if (_rend) _rend.material.color = Color.yellow;
                 break;
         }

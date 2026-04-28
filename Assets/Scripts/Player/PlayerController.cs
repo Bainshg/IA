@@ -5,17 +5,30 @@ public class PlayerController : MonoBehaviour
     private PlayerMovement _movement;
     private PlayerCombat _combat;
 
-    public bool IsWalking { get; private set; }
+    //public bool IsWalking { get; private set; }
+    private StateMachine<PlayerStates> _sm;
+    // los PlayerState acceden a estas variables
+    public Vector3 CurrentInput { get; private set; }
+    public PlayerMovement Movement => _movement;
+    public PlayerCombat Combat => _combat;
 
     void Awake()
     {
         _movement = GetComponent<PlayerMovement>();
         _combat = GetComponent<PlayerCombat>();
+
+        //inicializamos la FSM del player
+        _sm = new StateMachine<PlayerStates>();
+        _sm.AddState(PlayerStates.Idle, new PlayerIdleState(this, _sm));
+        _sm.AddState(PlayerStates.Walk, new PlayerWalkState(this, _sm));
+
+        // arrancamos en Idle
+        _sm.SetCurrent(new PlayerIdleState(this, _sm));
     }
 
     void Update()
     {
-        // Input manual para evitar "fantasmas" de joysticks
+        // Lectura de Input (Flechas y WASD)
         float h = 0;
         float v = 0;
 
@@ -25,22 +38,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) v = 1;
         else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) v = -1;
 
-        Vector3 inputDir = new Vector3(h, 0, v);
-        if (inputDir.sqrMagnitude > 0.01f)
-        {
-            IsWalking = true;
-            _movement.Move(inputDir.normalized);
-        }
-        else
-        {
-            IsWalking = false;
-            _movement.Move(Vector3.zero);
-        }
+        // Guardamos el input normalizado para los estados
+        CurrentInput = new Vector3(h, 0, v).normalized;
 
-        // Ejecutar ataque
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _combat.PerformAttack();
-        }
+        // Actualizamos la FSM
+        _sm.Update();
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyBase : MonoBehaviour
 {
-    [Header("Configuracion de Daño")]
+    [Header("Configuracion de DaÃ±o")]
     [SerializeField] private float contactDamage = 10f; 
 
     private void OnCollisionEnter(Collision collision)

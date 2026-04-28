@@ -7,7 +7,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Paneles")]
     [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private GameObject winPanel; // Arrastrá el panel de "Ganaste" acá
+    [SerializeField] private GameObject winPanel; // Arrastrï¿½ el panel de "Ganaste" acï¿½
 
     void Awake() => Instance = this;
 

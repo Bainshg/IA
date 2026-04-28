@@ -10,7 +10,6 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private bool isAggressive;
     private int _patrolIterations = 0;
 
-    // Accesos r�pidos SOLID
     public SteeringAgent Agent => GetComponent<SteeringAgent>();
     public ObstacleAvoidance Avoidance => GetComponent<ObstacleAvoidance>();
     public PatrolBehaviour Patrol => GetComponent<PatrolBehaviour>();
@@ -33,14 +32,14 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        // El �rbol decide el estado, la FSM lo ejecuta
+        // El arbol decide el estado, la FSM lo ejecuta
         GetComponent<EnemyDecisionTree>().OnUpdate();
         _sm.Update();
         
-        // UI state name
+        // UI para state name
         if (stateDebugText != null && _sm.CurrentState != null)
         {
-            stateDebugText.text = _sm.CurrentState.GetType().Name; // "Estado: " + 
+            stateDebugText.text = _sm.CurrentState.GetType().Name; //
         }
     }
 
