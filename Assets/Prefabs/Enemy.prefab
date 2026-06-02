@@ -184,7 +184,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &3433470937388998023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,8 +212,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateDebugText: {fileID: 9037496655792249630}
-  player: {fileID: 0}
-  isAggressive: 0
+  player: {fileID: 9095346498864846838, guid: a0d3e8ce1e5cf7844ad20f9aa2812f02, type: 3}
+  isAggressive: 1
 --- !u!114 &4899868746285742007
 MonoBehaviour:
   m_ObjectHideFlags: 0

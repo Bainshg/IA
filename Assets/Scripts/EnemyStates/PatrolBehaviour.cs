@@ -61,4 +61,13 @@ public class PatrolBehaviour : MonoBehaviour
     {
         return Vector3.Distance(transform.position, GetCurrentWaypoint()) < threshold;
     }
+    public Transform[] GetWaypoints()
+    {
+        return waypoints;
+    }
+    public void SetWaypoints(Transform[] newWaypoints)
+    {
+        waypoints = newWaypoints;
+        SetClosestWaypointAsStart(); 
+    }
 }
