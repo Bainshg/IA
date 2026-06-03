@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Obligamos a que el mánager también tenga el script de patrulla para sacar los puntos de ahí
 [RequireComponent(typeof(PatrolBehaviour))]
 public class FlockManager : MonoBehaviour
 {
@@ -46,7 +45,6 @@ public class FlockManager : MonoBehaviour
             {
                 _agents.Add(agent);
 
-                // INYECCIÓN DE DEPENDENCIAS: Le pasamos los puntos de la escena al prefab clonado
                 PatrolBehaviour agentPatrol = agent.GetComponent<PatrolBehaviour>();
                 if (agentPatrol != null && waypointsDelManager != null)
                 {

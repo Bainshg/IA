@@ -2293,11 +2293,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slimePrefab: {fileID: 6207177968325138801, guid: 33c0b2fe9a0e6aa42b3c96dcc76f05b8, type: 3}
   flockSize: 5
-  neighborRadius: 6.55
+  neighborRadius: 3.01
   separationWeight: 5
   alignmentWeight: 3.21
   cohesionWeight: 1.04
-  patrolWeight: 0
+  patrolWeight: 1.59
 --- !u!114 &1326064749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2356,7 +2356,7 @@ Transform:
   m_GameObject: {fileID: 1331333655}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23.24271, y: -3.3547134, z: 80.63232}
+  m_LocalPosition: {x: 23.24271, y: 1.1, z: 80.63232}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2377,8 +2377,8 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 128
-  gridWorldSize: {x: 1000, y: 2}
-  nodeRadius: 2
+  gridWorldSize: {x: 100, y: 70}
+  nodeRadius: 0.5
 --- !u!1 &1365118747
 GameObject:
   m_ObjectHideFlags: 0
