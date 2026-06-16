@@ -3,80 +3,84 @@ using System.Collections.Generic;
 
 public static class ThetaStar
 {
-    public static List<Vector3> FindPath(Vector3 startPos, Vector3 targetPos, LayerMask obstacleMask)
+    // Theta* sobre el grid de GridManager. devuelve la ruta en posiciones de mundo (o null).
+    // gScore/parents son locales a cada llamada: los Node no guardan costos, asi no se
+    // contaminan busquedas seguidas (era el bug del enfoque anterior).
+    public static List<Vector3> FindPath(Vector3 startPos, Vector3 targetPos, LayerMask obstacleMask, int maxExpansions = 2000)
     {
-        Node startNode = GridManager.Instance.NodeFromWorldPoint(startPos);
-        Node targetNode = GridManager.Instance.NodeFromWorldPoint(targetPos);
+        GridManager grid = GridManager.Instance;
+        if (grid == null) return null;
 
-        List<Node> openSet = new List<Node>();
-        HashSet<Node> closedSet = new HashSet<Node>();
-        openSet.Add(startNode);
+        Node startNode = grid.NodeFromWorldPoint(startPos);
+        Node targetNode = grid.NodeFromWorldPoint(targetPos);
+        if (startNode == null || targetNode == null || !startNode.walkable) return null;
 
-        while (openSet.Count > 0)
+        var gScore = new Dictionary<Node, float> { [startNode] = 0f };
+        var parents = new Dictionary<Node, Node>();
+        var closedSet = new HashSet<Node>();
+        var pending = new PriorityQueue<Node>();
+
+        pending.Enqueue(startNode, Heuristic(startNode, targetNode));
+
+        int expansions = 0;
+        while (!pending.IsEmpty)
         {
-            Node currentNode = openSet[0];
-            for (int i = 1; i < openSet.Count; i++)
-            {
-                if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
-                {
-                    currentNode = openSet[i];
-                }
-            }
+            if (++expansions > maxExpansions) break; // watchdog: evita picos si el destino es inalcanzable
 
-            openSet.Remove(currentNode);
-            closedSet.Add(currentNode);
+            Node current = pending.Dequeue();
+            // la PriorityQueue no tiene decrease-key: puede haber duplicados viejos.
+            // si el nodo ya se expandio, lo salteo
+            if (closedSet.Contains(current)) continue;
+            closedSet.Add(current);
 
-            if (currentNode == targetNode)
-            {
-                return RetracePath(startNode, targetNode);
-            }
+            if (current == targetNode) return RetracePath(parents, startNode, targetNode);
 
-            foreach (Node neighbor in GridManager.Instance.GetNeighbors(currentNode))
+            foreach (Node neighbor in grid.GetNeighbors(current))
             {
                 if (!neighbor.walkable || closedSet.Contains(neighbor)) continue;
 
-                if (currentNode.parent != null && InLineOfSight(currentNode.parent.worldPosition, neighbor.worldPosition, obstacleMask))
+                // corazon de Theta*: si el "abuelo" ve directo al vecino, lo conecto a el
+                // y salteo el nodo actual (rutas diagonales, sin zig-zag por la grilla)
+                Node from = current;
+                if (parents.TryGetValue(current, out Node grandParent) &&
+                    InLineOfSight(grandParent.worldPosition, neighbor.worldPosition, obstacleMask))
                 {
-                    float newMovementCostToNeighbor = currentNode.parent.gCost + Vector3.Distance(currentNode.parent.worldPosition, neighbor.worldPosition);
-                    if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
-                    {
-                        neighbor.gCost = newMovementCostToNeighbor;
-                        neighbor.hCost = Vector3.Distance(neighbor.worldPosition, targetNode.worldPosition);
-                        neighbor.parent = currentNode.parent; // Salteamos el nodo actual, conectamos directo al abuelo
-                        if (!openSet.Contains(neighbor)) openSet.Add(neighbor);
-                    }
+                    from = grandParent;
                 }
-                else // Si hay un obstáculo, nos comportamos como un A* común nodo a nodo
-                {
-                    float newMovementCostToNeighbor = currentNode.gCost + Vector3.Distance(currentNode.worldPosition, neighbor.worldPosition);
-                    if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
-                    {
-                        neighbor.gCost = newMovementCostToNeighbor;
-                        neighbor.hCost = Vector3.Distance(neighbor.worldPosition, targetNode.worldPosition);
-                        neighbor.parent = currentNode;
-                        if (!openSet.Contains(neighbor)) openSet.Add(neighbor);
-                    }
-                }
+
+                float tentativeG = gScore[from] + Vector3.Distance(from.worldPosition, neighbor.worldPosition);
+                if (gScore.TryGetValue(neighbor, out float existing) && tentativeG >= existing) continue;
+
+                gScore[neighbor] = tentativeG;
+                parents[neighbor] = from;
+                pending.Enqueue(neighbor, tentativeG + Heuristic(neighbor, targetNode));
             }
         }
         return null;
     }
 
+    private static float Heuristic(Node a, Node target)
+    {
+        return Vector3.Distance(a.worldPosition, target.worldPosition);
+    }
+
     private static bool InLineOfSight(Vector3 start, Vector3 end, LayerMask mask)
     {
         Vector3 dir = end - start;
-        return !Physics.Raycast(start, dir.normalized, dir.magnitude, mask);
+        float dist = dir.magnitude;
+        if (dist <= Mathf.Epsilon) return true;
+        return !Physics.Raycast(start, dir / dist, dist, mask);
     }
 
-    private static List<Vector3> RetracePath(Node startNode, Node endNode)
+    private static List<Vector3> RetracePath(Dictionary<Node, Node> parents, Node startNode, Node endNode)
     {
         List<Vector3> path = new List<Vector3>();
-        Node currentNode = endNode;
+        Node current = endNode;
 
-        while (currentNode != startNode)
+        while (current != startNode)
         {
-            path.Add(currentNode.worldPosition);
-            currentNode = currentNode.parent;
+            path.Add(current.worldPosition);
+            if (!parents.TryGetValue(current, out current)) break; // seguridad: cadena rota
         }
         path.Reverse();
         return path;

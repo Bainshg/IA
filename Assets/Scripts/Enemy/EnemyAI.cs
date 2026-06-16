@@ -46,4 +46,19 @@ public class EnemyAI : MonoBehaviour
     public void AddIteration() => _patrolIterations++;
     public void ResetIterations() => _patrolIterations = 0;
     public bool NeedsToIdle => _patrolIterations >= 3;
+
+    // --- memoria del objetivo (para perseguir sin LoS con Theta*) ---
+    // al perder LoS no olvida al toque: recuerda donde lo vio y lo persigue por una ventana.
+    private float _lastSeenTime = -999f;
+    public Vector3 LastKnownPlayerPos { get; private set; }
+
+    public void MarkPlayerSeen(Vector3 pos)
+    {
+        LastKnownPlayerPos = pos;
+        _lastSeenTime = Time.time;
+    }
+
+    public void ForgetPlayer() => _lastSeenTime = -999f;
+
+    public bool SawPlayerWithin(float seconds) => Time.time - _lastSeenTime <= seconds;
 }

@@ -8,7 +8,9 @@ public class EntityRunAwayState : EntityState
     public EntityRunAwayState(EnemyAI ai, StateMachine<EntityStates> sm) : base(sm)
     {
         _ai = ai;
-        _playerMovement = _ai.PlayerTransform.GetComponent<PlayerMovement>();
+        // PlayerTransform puede ser null (Variant flocking con player vacio); EnemyAI.Awake
+        // arma los estados igual, asi evito el NRE.
+        _playerMovement = _ai.PlayerTransform != null ? _ai.PlayerTransform.GetComponent<PlayerMovement>() : null;
     }
 
     public override void Execute()
@@ -23,7 +25,7 @@ public class EntityRunAwayState : EntityState
             _ai.Agent.MaxSpeed
         );
 
-        // El esquive tambi�n se aplica al huir
+        // el esquive tambien aplica al huir
         steer += _ai.Avoidance.GetAvoidanceForce();
         _ai.Agent.ApplySteering(steer);
     }

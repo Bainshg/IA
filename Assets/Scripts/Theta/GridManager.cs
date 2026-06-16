@@ -8,12 +8,6 @@ public class Node
     public int gridX;
     public int gridY;
 
-    public float gCost;
-    public float hCost;
-    public Node parent;
-
-    public float fCost => gCost + hCost;
-
     public Node(bool _walkable, Vector3 _worldPos, int _gridX, int _gridY)
     {
         walkable = _walkable;
@@ -34,6 +28,10 @@ public class GridManager : MonoBehaviour
     private float _nodeDiameter;
     private int _gridSizeX, _gridSizeY;
 
+    // misma mascara que el grid usa para marcar walkable; ThetaStar la reusa para sus
+    // chequeos de linea de vista entre nodos
+    public LayerMask ObstacleMask => obstacleMask;
+
     void Awake()
     {
         Instance = this;
@@ -53,7 +51,7 @@ public class GridManager : MonoBehaviour
             for (int y = 0; y < _gridSizeY; y++)
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * _nodeDiameter + nodeRadius) + Vector3.forward * (y * _nodeDiameter + nodeRadius);
-                // Si colisiona con la máscara de obstáculos, no es caminable
+                // Si colisiona con la mï¿½scara de obstï¿½culos, no es caminable
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, obstacleMask));
                 _grid[x, y] = new Node(walkable, worldPoint, x, y);
             }
@@ -62,8 +60,11 @@ public class GridManager : MonoBehaviour
 
     public Node NodeFromWorldPoint(Vector3 worldPosition)
     {
-        float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
-        float percentY = (worldPosition.z + gridWorldSize.y / 2) / gridWorldSize.y;
+        // el grid esta centrado en transform.position, asi que hay que restarlo. sino
+        // todo cae fuera de rango y Clamp01 lo satura al borde (era el bug del "norte
+        // fantasma": rompia tanto las rutas de Theta* como el gate de caminable del agente).
+        float percentX = (worldPosition.x - transform.position.x + gridWorldSize.x / 2) / gridWorldSize.x;
+        float percentY = (worldPosition.z - transform.position.z + gridWorldSize.y / 2) / gridWorldSize.y;
         percentX = Mathf.Clamp01(percentX);
         percentY = Mathf.Clamp01(percentY);
 

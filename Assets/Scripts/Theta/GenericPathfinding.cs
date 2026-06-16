@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// en desuso (confirmar con el equipo): Theta* generico. el proyecto usa el de grilla en
+// ThetaStar.cs (conectado a EntityChaseState). no lo borro hasta confirmar con el equipo.
 public class GenericPathfinding
 {
     public static List<T> ThetaStar<T>(T start, Func<T, bool> isSatisfies, Func<T, List<T>> getConnections,

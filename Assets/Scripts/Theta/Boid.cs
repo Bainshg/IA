@@ -1,10 +1,12 @@
 using UnityEngine;
 
+// en desuso (confirmar con el equipo): flocking alternativo con OverlapSphere. el que
+// se usa es FlockManager + FlockAgent. no lo borro hasta confirmar que nadie lo necesita.
 [RequireComponent(typeof(PatrolBehaviour))]
 [RequireComponent(typeof(SteeringAgent))] // Obliga a tener tu agente de steering
 public class Boid : MonoBehaviour
 {
-    [Header("Radios de Detección")]
+    [Header("Radios de Detecciï¿½n")]
     [SerializeField] private float separationRadius = 2f;
     [SerializeField] private float cohesionRadius = 4f;
 
@@ -44,12 +46,12 @@ public class Boid : MonoBehaviour
     {
         Vector3 totalForce = Vector3.zero;
 
-        // Sumamos las 3 fuerzas lógicas que te dio tu profesor
+        // Sumamos las 3 fuerzas lï¿½gicas que te dio tu profesor
         totalForce += Separation() * separationWeight;
         totalForce += Cohesion() * cohesionWeight;
         totalForce += Alignment() * alignmentWeight;
 
-        // Sumamos el avance por los Waypoints usando tu biblioteca estática 'SteeringBehaviours'
+        // Sumamos el avance por los Waypoints usando tu biblioteca estï¿½tica 'SteeringBehaviours'
         if (_patrol != null && _patrol.GetWaypoints() != null && _patrol.GetWaypoints().Length > 0)
         {
             Vector3 targetWaypoint = _patrol.GetCurrentWaypoint();
@@ -112,7 +114,7 @@ public class Boid : MonoBehaviour
 
         avgPosition /= cont;
 
-        // Usa tu Seek estático para ir al centro del enjambre
+        // Usa tu Seek estï¿½tico para ir al centro del enjambre
         return SteeringBehaviours.Seek(myTransform, avgPosition, _myAgent.Velocity, _myAgent.MaxSpeed);
     }
 
