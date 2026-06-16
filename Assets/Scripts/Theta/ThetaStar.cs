@@ -5,7 +5,7 @@ public static class ThetaStar
 {
     // Theta* sobre el grid de GridManager. devuelve la ruta en posiciones de mundo (o null).
     // gScore/parents son locales a cada llamada: los Node no guardan costos, asi no se
-    // contaminan busquedas seguidas (era el bug del enfoque anterior).
+    // contaminan busquedas seguidas
     public static List<Vector3> FindPath(Vector3 startPos, Vector3 targetPos, LayerMask obstacleMask, int maxExpansions = 2000)
     {
         GridManager grid = GridManager.Instance;
@@ -25,7 +25,7 @@ public static class ThetaStar
         int expansions = 0;
         while (!pending.IsEmpty)
         {
-            if (++expansions > maxExpansions) break; // watchdog: evita picos si el destino es inalcanzable
+            if (++expansions > maxExpansions) break; // evita picos si el destino es inalcanzable
 
             Node current = pending.Dequeue();
             // la PriorityQueue no tiene decrease-key: puede haber duplicados viejos.

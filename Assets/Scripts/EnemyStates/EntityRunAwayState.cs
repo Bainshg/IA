@@ -8,8 +8,7 @@ public class EntityRunAwayState : EntityState
     public EntityRunAwayState(EnemyAI ai, StateMachine<EntityStates> sm) : base(sm)
     {
         _ai = ai;
-        // PlayerTransform puede ser null (Variant flocking con player vacio); EnemyAI.Awake
-        // arma los estados igual, asi evito el NRE.
+        // PlayerTransform puede ser null
         _playerMovement = _ai.PlayerTransform != null ? _ai.PlayerTransform.GetComponent<PlayerMovement>() : null;
     }
 

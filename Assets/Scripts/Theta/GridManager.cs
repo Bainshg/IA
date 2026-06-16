@@ -61,8 +61,7 @@ public class GridManager : MonoBehaviour
     public Node NodeFromWorldPoint(Vector3 worldPosition)
     {
         // el grid esta centrado en transform.position, asi que hay que restarlo. sino
-        // todo cae fuera de rango y Clamp01 lo satura al borde (era el bug del "norte
-        // fantasma": rompia tanto las rutas de Theta* como el gate de caminable del agente).
+        // todo cae fuera de rango y Clamp01 lo satura al borde 
         float percentX = (worldPosition.x - transform.position.x + gridWorldSize.x / 2) / gridWorldSize.x;
         float percentY = (worldPosition.z - transform.position.z + gridWorldSize.y / 2) / gridWorldSize.y;
         percentX = Mathf.Clamp01(percentX);

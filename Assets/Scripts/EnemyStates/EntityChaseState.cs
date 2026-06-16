@@ -17,8 +17,7 @@ public class EntityChaseState : EntityState
     public EntityChaseState(EnemyAI ai, StateMachine<EntityStates> sm) : base(sm)
     {
         _ai = ai;
-        // PlayerTransform puede ser null (el Variant flocking lo deja vacio y EnemyAI.Awake
-        // arma los estados igual). evito el NRE aca.
+        // PlayerTransform puede ser null 
         _playerMovement = _ai.PlayerTransform != null ? _ai.PlayerTransform.GetComponent<PlayerMovement>() : null;
     }
 

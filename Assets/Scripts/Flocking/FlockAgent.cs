@@ -10,13 +10,10 @@ public class FlockAgent : MonoBehaviour
     private readonly List<FlockAgent> _neighbors = new List<FlockAgent>();
 
     // FSM propia del flock (usa el StateMachine<T> generico). el flock deja de usar el
-    // cerebro heredado (EnemyAI/EnemyDecisionTree); se decide todo aca.
+    // cerebro heredado (EnemyAI/EnemyDecisionTree)
     private StateMachine<FlockStates> _sm;
 
-    // seguidor de ruta Theta* (lo comparten los estados). ir por ruta evita el lio de
-    // Seek-vs-avoidance: Theta* garantiza vista libre entre nodos, asi el Seek nodo a
-    // nodo nunca apunta a una pared.
-    private List<Vector3> _path;
+    private List<Vector3> _path;     //pathfinding Theta*
     private int _pathIndex;
     private float _repathTimer;
     private Vector3 _pathDestination;
@@ -32,9 +29,8 @@ public class FlockAgent : MonoBehaviour
         _steeringAgent = GetComponent<SteeringAgent>();
         _patrol = GetComponent<PatrolBehaviour>();
 
-        // el Variant hereda el cerebro del Enemy base (EnemyAI + EnemyDecisionTree). ese
-        // cerebro compite por el mismo SteeringAgent y, con 'player' vacio, tiraria NRE
-        // cada frame. lo apago para que el unico que mueva sea FlockAgent.
+        // el Variant hereda el cerebro del Enemy base (EnemyAI + EnemyDecisionTree)
+        //lo apagamos para que el unico que controle sea FlockAgent.
         DisableInheritedBrain();
 
         _sm = new StateMachine<FlockStates>();
@@ -45,15 +41,11 @@ public class FlockAgent : MonoBehaviour
 
     void OnEnable()
     {
-        // auto-registro por las dudas (reactivaciones, agentes puestos a mano).
-        // Register() ignora duplicados, asi no choca con el alta del manager.
         if (FlockManager.Instance != null) FlockManager.Instance.Register(this);
     }
 
     void OnDestroy()
     {
-        // al morir el slime me saco de la lista del manager, asi ningun vecino lee un
-        // transform ya destruido (el bug del MissingReference).
         if (FlockManager.Instance != null) FlockManager.Instance.Unregister(this);
     }
 

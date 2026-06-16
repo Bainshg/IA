@@ -30,7 +30,7 @@ public class FlockManager : MonoBehaviour
 
     void Start()
     {
-        // Guardamos los waypoints que configuraste en este m�nager
+        // Guardamos los waypoints que configuramos en el manager
         Transform[] waypointsDelManager = _myPatrol.GetWaypoints();
 
         for (int i = 0; i < flockSize; i++)

@@ -1,9 +1,8 @@
 using UnityEngine;
 
-// en desuso (confirmar con el equipo): flocking alternativo con OverlapSphere. el que
-// se usa es FlockManager + FlockAgent. no lo borro hasta confirmar que nadie lo necesita.
+// en desuso si no me equivoco, el que se usa es FlockManager + FlockAgent
 [RequireComponent(typeof(PatrolBehaviour))]
-[RequireComponent(typeof(SteeringAgent))] // Obliga a tener tu agente de steering
+[RequireComponent(typeof(SteeringAgent))] // Obliga a tener agente de steering
 public class Boid : MonoBehaviour
 {
     [Header("Radios de Detecci�n")]
@@ -20,7 +19,7 @@ public class Boid : MonoBehaviour
 
     private Transform myTransform;
     private PatrolBehaviour _patrol;
-    private SteeringAgent _myAgent; // Tu agente real de movimiento
+    private SteeringAgent _myAgent; // agente real de movimiento
     private Vector3 myPosition => myTransform.position;
 
     private void Awake()
@@ -32,7 +31,7 @@ public class Boid : MonoBehaviour
 
     void Start()
     {
-        // Le metemos un impulso inicial directo usando tu script
+        // Le metemos un impulso inicial directo
         Vector3 randomImpulse = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
         _myAgent.ApplySteering(randomImpulse * _myAgent.MaxSpeed);
     }
@@ -46,17 +45,17 @@ public class Boid : MonoBehaviour
     {
         Vector3 totalForce = Vector3.zero;
 
-        // Sumamos las 3 fuerzas l�gicas que te dio tu profesor
+        // Sumamos las 3 fuerzas logicas 
         totalForce += Separation() * separationWeight;
         totalForce += Cohesion() * cohesionWeight;
         totalForce += Alignment() * alignmentWeight;
 
-        // Sumamos el avance por los Waypoints usando tu biblioteca est�tica 'SteeringBehaviours'
+        // Sumamos el avance por los Waypoints con steeringBehaviours
         if (_patrol != null && _patrol.GetWaypoints() != null && _patrol.GetWaypoints().Length > 0)
         {
             Vector3 targetWaypoint = _patrol.GetCurrentWaypoint();
 
-            // LLAMADA A TU SCRIPT: SteeringBehaviours.Seek
+            // SteeringBehaviours.Seek
             Vector3 patrolForce = SteeringBehaviours.Seek(myTransform, targetWaypoint, _myAgent.Velocity, _myAgent.MaxSpeed);
             totalForce += patrolForce * patrolWeight;
 
@@ -67,7 +66,7 @@ public class Boid : MonoBehaviour
             }
         }
 
-        // Le mandamos la fuerza final acumulada a tu propio ApplySteering
+        // Le mandamos la fuerza final acumulada al propio ApplySteering
         _myAgent.ApplySteering(totalForce);
     }
 
@@ -91,7 +90,7 @@ public class Boid : MonoBehaviour
 
         totalForce /= cont;
 
-        // Adaptado a tu script: calcula la fuerza deseada multiplicada por la velocidad mxima
+        // Adaptado al script: calcula la fuerza deseada multiplicada por la velocidad mxima
         Vector3 desired = totalForce * _myAgent.MaxSpeed;
         return desired - _myAgent.Velocity;
     }
@@ -114,7 +113,7 @@ public class Boid : MonoBehaviour
 
         avgPosition /= cont;
 
-        // Usa tu Seek est�tico para ir al centro del enjambre
+        // Usa Seek estatico para ir al centro del enjambre
         return SteeringBehaviours.Seek(myTransform, avgPosition, _myAgent.Velocity, _myAgent.MaxSpeed);
     }
 

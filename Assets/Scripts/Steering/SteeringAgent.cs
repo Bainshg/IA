@@ -23,10 +23,8 @@ public class SteeringAgent : MonoBehaviour
             transform.forward = _velocity.normalized;
     }
 
-    // choca con una pared? resbala a lo largo en vez de rebotar o frenar en seco.
-    // antes habia un rebote (Vector3.Reflect) que empujaba lejos de la pared y peleaba
-    // con el Seek al waypoint, mas un freno duro (velocity=0) que dejaba a los NPC
-    // trabados en las esquinas. el slide por ejes saca los dos.
+    // si choca con una pared, resbala a lo largo en vez de rebotar o frenar en seco.
+    // antes habia un rebote (Vector3.Reflect) que empujaba lejos de la pared y se "bugueaba" con el seek
     private void MoveWithWallSlide()
     {
         Vector3 delta = _velocity * Time.deltaTime;
