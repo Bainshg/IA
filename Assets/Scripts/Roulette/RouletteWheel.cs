@@ -2,19 +2,17 @@ using UnityEngine;
 
 public static class RouletteWheel
 {
-    public static int Select(float[] weights)
+    public static T Select<T>(params (T item, float weight)[] options)
     {
         float total = 0;
-        foreach (float w in weights) total += w; //obtenemos el total
-        float random = Random.Range(0, total); 
+        foreach (var o in options) total += o.weight;
+        float random = Random.Range(0, total);
         float current = 0;
-        for (int i = 0; i < weights.Length; i++)
+        foreach (var o in options)
         {
-            current += weights[i]; //le vamos sumando los weights a current
-            if (random <= current) return i; //cuando current supera a random, elegimos ese weight
+            current += o.weight;
+            if (random <= current) return o.item;
         }
-        
-        // si no retornó en el for, hubo un error raro pero retornamos 0 para catching.
-        return 0;
+        return options[0].item;
     }
 }

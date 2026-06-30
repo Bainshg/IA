@@ -28,11 +28,12 @@ public class HealthManager : MonoBehaviour, IDamageable
         if (gameObject.CompareTag("Player"))
         {
             if (UIManager.Instance != null) UIManager.Instance.ShowGameOver();
-            else Debug.LogError("¡No hay UIManager en la escena para el Player!");
+            else Debug.LogError("ï¿½No hay UIManager en la escena para el Player!");
         }
         else
         {
             // Si es un enemigo, se va a la casa
+            LevelManager.Instance?.RegisterEnemyKill();
             Destroy(gameObject);
         }
     }
