@@ -19,9 +19,12 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public int EnemiesKilled { get; private set; }
+    public void RegisterEnemyKill() => EnemiesKilled++;
+
     public void WinGame()
     {
-        Debug.Log("¡Victoria!");
+        Debug.Log("ï¿½Victoria!");
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowWinScreen();
@@ -30,7 +33,7 @@ public class LevelManager : MonoBehaviour
 
     public void LoseGame()
     {
-        Debug.Log("¡Derrota!");
+        Debug.Log("ï¿½Derrota!");
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowGameOver();
