@@ -7,7 +7,7 @@ public class PlayerWalkState : PlayerState
     public override void Awake()
     {
         // Cuando se mueve, el rango de ataque es menor
-        _controller.Combat.SetAttackRange(2.0f);
+        _controller.Combat.SetAttackRange(4);
     }
 
     public override void Execute()

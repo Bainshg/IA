@@ -24,7 +24,7 @@ public class LevelManager : MonoBehaviour
 
     public void WinGame()
     {
-        Debug.Log("�Victoria!");
+        Debug.Log("Victoria!");
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowWinScreen();
@@ -33,7 +33,7 @@ public class LevelManager : MonoBehaviour
 
     public void LoseGame()
     {
-        Debug.Log("�Derrota!");
+        Debug.Log("Derrota!");
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowGameOver();

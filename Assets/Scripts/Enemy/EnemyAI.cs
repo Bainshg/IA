@@ -9,6 +9,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private bool isAggressive;
     private int _patrolIterations = 0;
+    public float extraStunChance = 0f;
 
     public SteeringAgent Agent => GetComponent<SteeringAgent>();
     public ObstacleAvoidance Avoidance => GetComponent<ObstacleAvoidance>();
