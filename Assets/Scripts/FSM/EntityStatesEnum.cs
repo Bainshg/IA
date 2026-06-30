@@ -4,5 +4,6 @@ public enum EntityStates
     Patrol,
     Chase,
     Attack,
-    RunAway
+    RunAway,
+    Stunned
 }

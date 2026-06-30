@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    [Header("Configuraci�n de Ataque")]
     [SerializeField] private float damageValue = 25f;
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private LayerMask enemyLayer;
@@ -11,21 +10,25 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private Transform rangeIndicator;
     public void PerformAttack()
     {
-        Vector3 attackCenter = transform.position; //+ transform.forward * 1.5f;
+        Vector3 attackCenter = transform.position;
         Collider[] hitEnemies = Physics.OverlapSphere(attackCenter, attackRange, enemyLayer);
 
         foreach (Collider enemy in hitEnemies)
         {
-            // Buscamos la interfaz, no importa el nombre del script de vida
             if (enemy.TryGetComponent(out IDamageable victim))
             {
                 victim.TakeDamage(damageValue);
                 Debug.Log($"<color=green>Impacto en {enemy.name}!</color>");
             }
+
+            EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
+            if (enemyAI != null && enemyAI.StateMachine != null)
+            {
+                enemyAI.StateMachine.ChangeState(EntityStates.Stunned);
+            }
         }
     }
 
-    // Para ver el rango en el Editor
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

@@ -26,10 +26,11 @@ public class EnemyAI : MonoBehaviour
         _sm.AddState(EntityStates.Chase, new EntityChaseState(this, _sm));
         _sm.AddState(EntityStates.RunAway, new EntityRunAwayState(this, _sm));
         _sm.AddState(EntityStates.Attack, new EntityAttackState(this, _sm));
+        _sm.AddState(EntityStates.Stunned, new EntityStunnedState(this, _sm));
 
         _sm.SetCurrent(new EntityPatrolState(this, _sm));
+        
     }
-
     void Update()
     {
         // El arbol decide el estado, la FSM lo ejecuta
@@ -42,7 +43,7 @@ public class EnemyAI : MonoBehaviour
             stateDebugText.text = _sm.CurrentState.GetType().Name; //
         }
     }
-
+    
     public void AddIteration() => _patrolIterations++;
     public void ResetIterations() => _patrolIterations = 0;
     public bool NeedsToIdle => _patrolIterations >= 3;
